@@ -1,0 +1,89 @@
+import React, { useEffect, useState } from "react";
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  age: number;
+  gender: string;
+  email: string;
+  phone: string;
+  username: string;
+  birthDate: string;
+  image: string;
+  height: number;
+  weight: number;
+  address: { address: string };
+  bank: { cardNumber: string };
+  company: { name: string };
+}
+
+function UserTable() {
+  const [userData, setUserData] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("https://dummyjson.com/users");
+        const data = await response.json();
+        setUserData(data.users);
+      } catch (error) {
+        console.log("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  return (
+    <div>
+      <h2>User Data</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Username</th>
+            <th>Birth Date</th>
+            <th>Image</th>
+            <th>Height</th>
+            <th>Weight</th>
+            <th>Address</th>
+            <th>Bank</th>
+            <th>Company</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userData.map((user) => (
+            <tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.firstName}</td>
+              <td>{user.lastName}</td>
+              <td>{user.age}</td>
+              <td>{user.gender}</td>
+              <td>{user.email}</td>
+              <td>{user.phone}</td>
+              <td>{user.username}</td>
+              <td>{user.birthDate}</td>
+              <td>
+                <img src={user.image} alt="User" />
+              </td>
+              <td>{user.height}</td>
+              <td>{user.weight}</td>
+              <td>{user.address.address}</td>
+              <td>{user.bank.cardNumber}</td>
+              <td>{user.company.name}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default UserTable;
